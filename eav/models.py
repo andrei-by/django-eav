@@ -43,6 +43,7 @@ from django.contrib.contenttypes import fields as generic
 from django.contrib.sites.models import Site
 from django.contrib.sites.managers import CurrentSiteManager
 from django.conf import settings
+from mptt.models import MPTTModel, TreeForeignKey
 
 from .validators import *
 from .fields import EavSlugField, EavDatatypeField
@@ -153,7 +154,7 @@ class Attribute(models.Model):
 
     class Meta:
         ordering = ['name']
-        unique_together = ('site', 'slug')
+        unique_together = ('site', 'slug', 'category')
 
     TYPE_TEXT = 'text'
     TYPE_FLOAT = 'float'
@@ -178,6 +179,11 @@ class Attribute(models.Model):
 
     site = models.ForeignKey(Site, verbose_name=_(u"site"),
                              default=settings.SITE_ID)
+
+    category = TreeForeignKey(MPTTModel, null=True, blank=True,
+                              related_name='category', db_index=True,
+                              default=null)
+
 
     slug = EavSlugField(_(u"slug"), max_length=50, db_index=True,
                           help_text=_(u"Short unique attribute label"))
