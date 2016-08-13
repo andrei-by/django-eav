@@ -181,8 +181,7 @@ class Attribute(models.Model):
                              default=settings.SITE_ID)
 
     category = TreeForeignKey(MPTTModel, null=True, blank=True,
-                              related_name='category', db_index=True,
-                              default=null)
+                              related_name='category', db_index=True)
 
 
     slug = EavSlugField(_(u"slug"), max_length=50, db_index=True,
