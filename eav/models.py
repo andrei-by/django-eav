@@ -56,7 +56,7 @@ class Category(MPTTModel):
     class MPTTMeta:
         order_insertion_by = ['name']
 
-    def __str__(self):
+    def __unicode__(self):
         return self.name
 
 
@@ -191,7 +191,8 @@ class Attribute(models.Model):
     site = models.ForeignKey(Site, verbose_name=_(u"site"),
                              default=settings.SITE_ID)
 
-    category = models.ForeignKey(Category, verbose_name=_(u"category"))
+    category = TreeForeignKey(Category, null=True, blank=True, db_index=True,
+                              verbose_name=_(u"category"))
 
     slug = EavSlugField(_(u"slug"), max_length=50, db_index=True,
                           help_text=_(u"Short unique attribute label"))
