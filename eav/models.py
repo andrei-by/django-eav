@@ -49,6 +49,17 @@ from .validators import *
 from .fields import EavSlugField, EavDatatypeField
 
 
+class Category(MPTTModel):
+    name = models.CharField(max_length=50, unique=True)
+    parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True)
+
+    class MPTTMeta:
+        order_insertion_by = ['name']
+
+    def __str__(self):
+        return self.name
+
+
 class EnumValue(models.Model):
     '''
     *EnumValue* objects are the value 'choices' to multiple choice
@@ -572,13 +583,3 @@ if 'django_nose' in settings.INSTALLED_APPS:
     Please, someone tell me a better way to do this.
     '''
     from .tests.models import Patient, Encounter
-
-class Category(MPTTModel):
-    name = models.CharField(max_length=50, unique=True)
-    parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True)
-
-    class MPTTMeta:
-        order_insertion_by = ['name']
-
-    def __str__(self):
-        return self.name
