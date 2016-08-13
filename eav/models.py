@@ -180,7 +180,7 @@ class Attribute(models.Model):
     site = models.ForeignKey(Site, verbose_name=_(u"site"),
                              default=settings.SITE_ID)
 
-    category = TreeForeignKey(MPTTModel, null=True, blank=True,
+    category = TreeForeignKey(Category, null=True, blank=True,
                               related_name='category', db_index=True)
 
 
@@ -572,3 +572,13 @@ if 'django_nose' in settings.INSTALLED_APPS:
     Please, someone tell me a better way to do this.
     '''
     from .tests.models import Patient, Encounter
+
+class Category(MPTTModel):
+    name = models.CharField(max_length=50, unique=True)
+    parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True)
+
+    class MPTTMeta:
+        order_insertion_by = ['name']
+
+    def __str__(self):
+        return self.name
