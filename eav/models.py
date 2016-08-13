@@ -191,7 +191,7 @@ class Attribute(models.Model):
     site = models.ForeignKey(Site, verbose_name=_(u"site"),
                              default=settings.SITE_ID)
 
-    category = models.ForeignKey(Category, verbose_name=_(u"category")
+    category = models.ForeignKey(Category, verbose_name=_(u"category"))
 
     slug = EavSlugField(_(u"slug"), max_length=50, db_index=True,
                           help_text=_(u"Short unique attribute label"))
