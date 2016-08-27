@@ -50,6 +50,7 @@ from .fields import EavSlugField, EavDatatypeField
 class Category(MPTTModel):
     name = models.CharField(max_length=50, unique=True)
     parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True)
+    slug = models.SlugField(max_length=250, unique=True, verbose_name="Slug")
 
     class MPTTMeta:
         order_insertion_by = ['name']
