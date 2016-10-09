@@ -169,8 +169,8 @@ class Attribute(models.Model):
     '''
 
     class Meta:
-        verbose_name = "EAV аттрибут товара"
-        verbose_name_plural = "EAV аттрибуты товаров"
+        verbose_name = "EAV атрибут товара"
+        verbose_name_plural = "EAV атрибуты товаров"
         ordering = ['name']
         unique_together = ('slug', 'category')
 
@@ -193,18 +193,17 @@ class Attribute(models.Model):
     )
 
     name = models.CharField(_(u"name"), max_length=100,
-                            help_text=_(u"Имя аттрибута"))
+                            help_text=_(u"Имя атрибута"))
 
     category = TreeForeignKey(Category, null=True, blank=True, db_index=True,
                               verbose_name=_(u"Категория товара"))
 
     slug = EavSlugField(_(u"slug"), max_length=50, db_index=True,
-                          help_text=_(u"Уникаьный индентификатор аттрибута"))
+                          help_text=_(u"Уникальный индентификатор атрибута"))
 
     description = models.CharField(_(u"description"), max_length=256,
                                      blank=True, null=True,
-                                     verbose_name=_(u"Описание"),
-                                     help_text=_(u"Краткое описание аттрибута"))
+                                     help_text=_(u"Краткое описание атрибута"))
 
     enum_group = models.ForeignKey(EnumGroup, verbose_name=_(u"choice group"),
                                    blank=True, null=True)
@@ -354,8 +353,8 @@ class Value(models.Model):
     <Value: crazy_dev_user - Favorite Drink: "red bull">
     '''
     class Meta:
-        verbose_name = "EAV значение аттрибута"
-        verbose_name_plural = "EAV значения аттрибутов"
+        verbose_name = "EAV значение атрибута"
+        verbose_name_plural = "EAV значения атрибутов"
 
     entity_ct = models.ForeignKey(ContentType, related_name='value_entities')
     entity_id = models.IntegerField()
