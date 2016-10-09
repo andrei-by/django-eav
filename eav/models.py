@@ -222,7 +222,7 @@ class Attribute(models.Model):
 
     modified = models.DateTimeField(_(u"modified"), auto_now=True)
 
-    required = models.BooleanField(_(u"required"), default=False, verbose_name=_(u"Обязательный"))
+    required = models.BooleanField(_(u"required"), default=False)
 
     objects = models.Manager()
 
