@@ -48,9 +48,15 @@ from .fields import EavSlugField, EavDatatypeField
 
 
 class Category(MPTTModel):
-    name = models.CharField(max_length=50, unique=True)
-    parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True)
-    slug = models.SlugField(max_length=250, null=True, blank=True, unique=True, verbose_name="Slug")
+    name = models.CharField(max_length=50, unique=True, verbose_name="Имя категории")
+    parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True,
+        verbose_name="Родительская категория" )
+    slug = models.SlugField(max_length=250, null=True, blank=True, unique=True, verbose_name="Slug",
+        help_text="Задайте slug для этой категории")
+
+    class Meta:
+        verbose_name = "EAV категория товара"
+        verbose_name_plural = "EAV категории товаров"
 
     class MPTTMeta:
         order_insertion_by = ['name']
@@ -163,6 +169,8 @@ class Attribute(models.Model):
     '''
 
     class Meta:
+        verbose_name = "EAV аттрибут товара"
+        verbose_name_plural = "EAV аттрибуты товаров"
         ordering = ['name']
         unique_together = ('slug', 'category')
 
@@ -185,17 +193,18 @@ class Attribute(models.Model):
     )
 
     name = models.CharField(_(u"name"), max_length=100,
-                            help_text=_(u"User-friendly attribute name"))
+                            help_text=_(u"Имя аттрибута"))
 
     category = TreeForeignKey(Category, null=True, blank=True, db_index=True,
-                              verbose_name=_(u"category"))
+                              verbose_name=_(u"Категория товара"))
 
     slug = EavSlugField(_(u"slug"), max_length=50, db_index=True,
-                          help_text=_(u"Short unique attribute label"))
+                          help_text=_(u"Уникаьный индентификатор аттрибута"))
 
     description = models.CharField(_(u"description"), max_length=256,
                                      blank=True, null=True,
-                                     help_text=_(u"Short description"))
+                                     verbose_name=_(u"Описание"),
+                                     help_text=_(u"Краткое описание аттрибута"))
 
     enum_group = models.ForeignKey(EnumGroup, verbose_name=_(u"choice group"),
                                    blank=True, null=True)
@@ -214,7 +223,7 @@ class Attribute(models.Model):
 
     modified = models.DateTimeField(_(u"modified"), auto_now=True)
 
-    required = models.BooleanField(_(u"required"), default=False)
+    required = models.BooleanField(_(u"required"), default=False, verbose_name=_(u"Обязательный"))
 
     objects = models.Manager()
 
@@ -344,6 +353,9 @@ class Value(models.Model):
     >>> Value.objects.create(entity=u, attribute=a, value_text='red bull')
     <Value: crazy_dev_user - Favorite Drink: "red bull">
     '''
+    class Meta:
+        verbose_name = "EAV значение аттрибута"
+        verbose_name_plural = "EAV значения аттрибутов"
 
     entity_ct = models.ForeignKey(ContentType, related_name='value_entities')
     entity_id = models.IntegerField()
